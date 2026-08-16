@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ウォームアップ・ワークベンチ — Cory Wong 練習ルーティン</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600;125,800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1D1526;
+  --panel:#291E34;
+  --panel2:#33253F;
+  --line:#453354;
+  --cream:#F4EAD9;
+  --dim:#A392B0;
+  --mustard:#F0B429;
+  --coral:#E8573F;
+  --mint:#45C4A8;
+  --sky:#6FA8DC;
+  --radius:14px;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --disp:'Archivo','Zen Kaku Gothic New',system-ui,sans-serif;
+  --body:'Zen Kaku Gothic New',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--ink);
+  color:var(--cream);
+  font-family:var(--body);
+  font-weight:400;
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+  letter-spacing:.01em;
+}
+a{color:var(--mustard)}
+h1,h2,h3{line-height:1.25;margin:0}
+.wrap{max-width:980px;margin:0 auto;padding:0 18px}
+
+/* ---------- compact top bar ---------- */
+.topbar{display:flex;align-items:center;gap:14px;padding:11px 0 9px}
+.topbar .brand{font-weight:900;font-size:14px;letter-spacing:.01em;white-space:nowrap}
+.topbar .brand i{color:var(--mustard);font-style:normal}
+.topbar .src{
+  margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--dim);
+  text-decoration:none;letter-spacing:.04em;white-space:nowrap;
+}
+.topbar .src:hover{color:var(--cream)}
+.pulsestrip{display:flex;gap:2px;height:5px;margin:0 0 8px}
+.pulsestrip i{flex:1;border-radius:2px;background:var(--panel2);display:block;transition:background .1s linear}
+.pulsestrip i.on{background:var(--mustard)}
+.pulsestrip i.beat{background:var(--line)}
+
+/* ---------- collapsible reference panels ---------- */
+details.fold{border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);margin-bottom:16px}
+details.fold > summary{
+  cursor:pointer;list-style:none;padding:12px 16px;
+  font-size:12.5px;font-weight:700;color:var(--dim);display:flex;align-items:center;gap:9px;
+}
+details.fold > summary::-webkit-details-marker{display:none}
+details.fold > summary::before{content:'+';font-family:var(--mono);color:var(--mustard);font-size:13px}
+details.fold[open] > summary{color:var(--cream);border-bottom:1px solid var(--line)}
+details.fold[open] > summary::before{content:'–'}
+details.fold > summary:focus-visible{outline:2px solid var(--mustard);outline-offset:-2px;border-radius:var(--radius)}
+.foldbody{padding:14px 16px 18px}
+.foldbody p{margin:0;color:var(--dim);font-size:13.5px;max-width:64ch}
+details.fold .why{border:0;border-left:0;background:none;margin:0;padding:14px 16px 18px}
+details.fold .why > h3{display:none}
+
+/* ---------- nav ---------- */
+nav{position:sticky;top:0;z-index:40;background:rgba(29,21,38,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{
+  flex:0 0 auto;background:none;border:0;border-bottom:2px solid transparent;
+  color:var(--dim);font-family:var(--body);font-weight:700;font-size:13px;
+  padding:14px 14px 12px;cursor:pointer;white-space:nowrap;
+}
+.tabs button b{font-family:var(--disp);font-weight:800;font-size:11px;color:var(--line);margin-right:7px;letter-spacing:.1em}
+.tabs button[aria-selected="true"]{color:var(--cream);border-bottom-color:var(--mustard)}
+.tabs button[aria-selected="true"] b{color:var(--mustard)}
+.tabs button:hover{color:var(--cream)}
+.tabs button:focus-visible{outline:2px solid var(--mustard);outline-offset:-2px}
+
+/* ---------- sections ---------- */
+section[role="tabpanel"]{padding:16px 0 64px}
+section[hidden]{display:none}
+.sechead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.lede{color:var(--dim);font-size:14px;max-width:62ch;margin:0 0 22px}
+h2.sec{font-size:clamp(15px,3.2vw,17px);font-weight:900;margin:0}
+.timecode{font-family:var(--mono);font-size:10.5px;color:var(--mustard);letter-spacing:.06em;margin:0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:16px}
+.card h3{font-size:14px;font-weight:700;letter-spacing:.02em;margin-bottom:10px}
+.card h3 small{color:var(--dim);font-weight:400;margin-left:8px;font-size:12px}
+
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.btn{
+  font-family:var(--body);font-weight:700;font-size:13px;
+  background:var(--panel2);color:var(--cream);border:1px solid var(--line);
+  border-radius:999px;padding:9px 17px;cursor:pointer;transition:background .15s,color .15s;
+}
+.btn:hover{background:var(--line)}
+.btn:focus-visible{outline:2px solid var(--mustard);outline-offset:2px}
+.btn.primary{background:var(--mustard);color:#241a08;border-color:var(--mustard)}
+.btn.primary:hover{background:#ffc94a}
+.btn.ghost{background:none}
+.btn[aria-pressed="true"]{background:var(--cream);color:var(--ink);border-color:var(--cream)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.seg button{
+  background:none;border:0;color:var(--dim);font-family:var(--body);font-weight:700;font-size:12px;
+  padding:8px 14px;cursor:pointer
+}
+.seg button[aria-pressed="true"]{background:var(--panel2);color:var(--cream)}
+.seg button:focus-visible{outline:2px solid var(--mustard);outline-offset:-2px}
+
+.slider{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:12px;color:var(--dim)}
+input[type=range]{
+  -webkit-appearance:none;appearance:none;height:3px;background:var(--line);border-radius:2px;flex:1;min-width:120px;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--mustard);cursor:pointer;border:0;
+}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--mustard);cursor:pointer;border:0}
+input[type=range]:focus-visible{outline:2px solid var(--mustard);outline-offset:4px}
+.bpm{font-family:var(--disp);font-weight:800;font-size:22px;color:var(--cream);min-width:2.6em;text-align:right}
+
+/* ---------- circle of fifths ---------- */
+.dial text{font-family:var(--disp);font-weight:800}
+.dial .kmaj{fill:var(--cream);font-size:13px}
+.dial .kmin{fill:var(--dim);font-size:9px}
+.dial g.key{cursor:pointer}
+.dial g.key:hover circle{stroke:var(--cream)}
+.dial g.key.active circle{fill:var(--mustard);stroke:var(--mustard)}
+.dial g.key.active .kmaj{fill:#241a08}
+.dial g.key.active .kmin{fill:#4a3712}
+.dial g.key.done circle{stroke:var(--mint)}
+
+.nowplaying{text-align:center;padding:4px 0 10px}
+.nowplaying .keyname{font-family:var(--disp);font-weight:800;font-size:clamp(38px,10vw,64px);letter-spacing:-.02em;line-height:1}
+.nowplaying .sayit{
+  font-family:var(--disp);font-weight:800;font-size:clamp(46px,13vw,84px);color:var(--mustard);line-height:1;
+  min-height:1em;letter-spacing:-.02em
+}
+.nowplaying .degree{font-family:var(--mono);font-size:12px;color:var(--dim);letter-spacing:.24em}
+.nowplaying .sub{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.1em;margin-top:6px}
+@media(max-width:760px){
+  .nowplaying{padding:0 0 4px}
+  .nowplaying .sayit{font-size:clamp(40px,11vw,56px)}
+  .nowplaying .sub{margin-top:2px}
+}
+
+/* ---------- fretboard ---------- */
+.fbscroll{overflow-x:auto;margin:6px -4px 0;padding:4px;-webkit-overflow-scrolling:touch}
+.fbscroll.vert{overflow-x:visible}
+.fb{display:block;min-width:520px;width:100%}
+.fb.vert{min-width:0;width:100%;max-width:232px;margin:0 auto}
+.scrollhint{
+  font-family:var(--mono);font-size:9.5px;color:#6C5478;letter-spacing:.1em;
+  text-align:center;margin-top:4px;
+}
+.fbscroll.vert + .scrollhint{display:none}
+
+/* section 01: 縦並びのときは 音名 → 指板 → 操作 → 五度圏 の順 */
+.w1grid{display:grid;grid-template-columns:minmax(0,270px) minmax(0,1fr);gap:22px;align-items:center}
+.w1grid #dialbox{grid-column:1;grid-row:1}
+.w1grid #npbox{grid-column:2;grid-row:1}
+.w1grid #fbbox{grid-column:1 / -1;grid-row:2}
+@media(max-width:760px){
+  .w1grid{display:flex;flex-direction:column;gap:10px}
+  .w1grid #npbox{order:1}
+  .w1grid #fbbox{order:2}
+  .w1grid #dialbox{order:3;width:100%;padding-top:6px;border-top:1px solid var(--line)}
+  .w1grid #dialbox .dialcap{
+    font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.14em;
+    text-align:center;margin-bottom:2px;
+  }
+}
+.dialcap{display:none}
+@media(max-width:760px){.dialcap{display:block}}
+.dial{width:100%;max-width:270px;margin:0 auto;display:block}
+
+/* ---------- tab readout ---------- */
+.tabout{
+  font-family:var(--mono);font-size:12.5px;line-height:1.9;color:var(--dim);
+  background:#160F1D;border:1px solid var(--line);border-radius:10px;padding:14px;overflow-x:auto;white-space:pre;
+}
+.tabout b{color:var(--mustard);font-weight:600}
+.tabout u{color:var(--cream);text-decoration:none;background:var(--line);border-radius:3px}
+
+/* ---------- rhythm grid ---------- */
+.grid16{display:grid;grid-template-columns:repeat(16,1fr);gap:3px;margin:12px 0 6px}
+.grid16 .cell{
+  aspect-ratio:1/1.35;border-radius:5px;background:var(--panel2);border:1px solid transparent;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:10px;color:var(--dim);
+}
+.grid16 .cell.accent{background:var(--coral);color:#2a0b05;font-weight:600;border-color:var(--coral)}
+.grid16 .cell.beat{border-color:var(--line)}
+.grid16 .cell.head{outline:2px solid var(--cream);outline-offset:1px}
+.barlist{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.barlist .b{
+  font-family:var(--mono);font-size:10px;color:var(--dim);border:1px solid var(--line);
+  border-radius:6px;padding:4px 8px;letter-spacing:.06em
+}
+.barlist .b.on{background:var(--cream);color:var(--ink);border-color:var(--cream)}
+.countline{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.06em}
+
+/* ---------- gridding scatter ---------- */
+.scatter{width:100%;height:130px;display:block;background:#160F1D;border:1px solid var(--line);border-radius:10px}
+.stats{display:flex;gap:22px;flex-wrap:wrap;margin-top:12px}
+.stat .v{font-family:var(--disp);font-weight:800;font-size:26px}
+.stat .l{font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.14em;text-transform:uppercase}
+.tappad{
+  width:100%;padding:26px;border-radius:12px;border:1px dashed var(--line);background:var(--panel2);
+  color:var(--cream);font-family:var(--body);font-weight:700;font-size:15px;cursor:pointer;margin-top:12px;
+}
+.tappad:active{background:var(--line)}
+
+/* ---------- streak ---------- */
+.streakgrid{display:grid;grid-template-columns:repeat(14,1fr);gap:4px;margin-top:12px}
+.streakgrid i{aspect-ratio:1;border-radius:4px;background:var(--panel2)}
+.streakgrid i.done{background:var(--mint)}
+.streakgrid i.today{outline:1.5px solid var(--cream);outline-offset:1px}
+
+/* ---------- 狙い / 効果 / つまずき ---------- */
+.why{
+  background:#241A2F;border:1px solid var(--line);border-left:3px solid var(--mustard);
+  border-radius:12px;padding:18px 20px;margin-bottom:16px;
+}
+.why > h3{
+  font-family:var(--body);font-weight:900;font-size:15px;margin:0 0 4px;
+}
+.why > p{color:var(--dim);font-size:13px;margin:0 0 16px;max-width:64ch}
+.cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+@media(max-width:760px){.cols{grid-template-columns:1fr;gap:16px}}
+.col h4{
+  font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.16em;
+  margin:0 0 9px;padding-bottom:6px;border-bottom:1px solid var(--line);
+}
+.col.aim h4{color:var(--mustard)}
+.col.gain h4{color:var(--mint)}
+.col.trap h4{color:var(--coral)}
+.col ul{margin:0;padding-left:1.05em;font-size:13px;color:var(--dim);line-height:1.7}
+.col li{margin-bottom:8px}
+.col li b{color:var(--cream);font-weight:700}
+.menu{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media(max-width:700px){.menu{grid-template-columns:1fr}}
+.menu .m{border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.menu .m h4{font-family:var(--disp);font-weight:800;font-size:13px;letter-spacing:.1em;color:var(--mustard);margin:0 0 8px}
+.menu ol{margin:0;padding-left:1.2em;font-size:13px;color:var(--dim);line-height:1.75}
+.menu ol b{color:var(--cream);font-weight:700}
+
+.note{font-size:13px;color:var(--dim);border-left:2px solid var(--line);padding-left:12px;margin:14px 0}
+.note b{color:var(--cream);font-weight:700}
+footer{border-top:1px solid var(--line);padding:26px 0 60px;color:var(--dim);font-size:12px}
+.kbd{font-family:var(--mono);font-size:11px;background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">ウォームアップ・<i>ワークベンチ</i></div>
+      <a class="src" href="https://fretboardanatomy.com/cory-wong-warmup-tab/" target="_blank" rel="noopener">CORY WONG ROUTINE ↗</a>
+    </div>
+    <div class="pulsestrip" id="heroStrip" aria-hidden="true"></div>
+  </div>
+</header>
+
+<nav>
+  <div class="wrap">
+    <div class="tabs" role="tablist">
+      <button role="tab" id="tab1" aria-controls="p1" aria-selected="true"><b>01</b>アルペジオ × 五度圏</button>
+      <button role="tab" id="tab2" aria-controls="p2" aria-selected="false"><b>02</b>クロマチックアプローチ</button>
+      <button role="tab" id="tab3" aria-controls="p3" aria-selected="false"><b>03</b>アクセント移動</button>
+      <button role="tab" id="tab4" aria-controls="p4" aria-selected="false"><b>04</b>グリッド計測 &amp; 習慣</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ======================= 01 ======================= -->
+<section role="tabpanel" id="p1" aria-labelledby="tab1">
+  <div class="wrap">
+    <div class="sechead">
+      <h2 class="sec">3オクターブのトライアドを、五度圏で一周する</h2>
+      <span class="timecode">動画 1:03 —</span>
+    </div>
+
+    <div class="card">
+      <div class="w1grid">
+        <div id="npbox">
+          <div class="nowplaying">
+            <div class="degree" id="w1deg">R</div>
+            <div class="sayit" id="w1say">C</div>
+            <div class="keyname" id="w1key" style="font-size:22px">C major</div>
+            <div class="sub" id="w1pos">— / 17 音</div>
+          </div>
+        </div>
+        <div id="fbbox">
+          <div class="fbscroll" id="w1scroll"><svg class="fb" id="w1fb" role="img" aria-label="指板図"></svg></div>
+          <div class="scrollhint">← 横スクロールできます／再生中は自動で追従 →</div>
+        </div>
+        <div id="dialbox">
+          <div class="dialcap">キーを選ぶ（五度圏・反時計回り）</div>
+          <svg class="dial" id="dial" viewBox="0 0 260 260" role="img" aria-label="五度圏。反時計回りに進みます"></svg>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:16px">
+        <button class="btn primary" id="w1play">再生</button>
+        <div class="seg" role="group" aria-label="調の種類">
+          <button id="w1maj" aria-pressed="true">メジャー</button>
+          <button id="w1min" aria-pressed="false">平行短調</button>
+        </div>
+        <button class="btn ghost" id="w1next">次のキーへ</button>
+        <button class="btn ghost" id="w1auto" aria-pressed="false">24キー自動送り</button>
+        <button class="btn ghost" id="w1sound" aria-pressed="true">音を鳴らす</button>
+        <div class="seg" role="group" aria-label="指板の向き">
+          <button id="w1vert" aria-pressed="false">縦</button>
+          <button id="w1horiz" aria-pressed="true">横</button>
+        </div>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <div class="slider" style="flex:1">
+          <span>TEMPO</span>
+          <input type="range" id="w1tempo" min="40" max="160" value="76" aria-label="テンポ">
+          <span class="bpm" id="w1bpmv">76</span>
+        </div>
+        <div class="seg" role="group" aria-label="音符の細かさ">
+          <button id="w1q" aria-pressed="true">4分</button>
+          <button id="w1e" aria-pressed="false">8分</button>
+        </div>
+      </div>
+      <div class="note">
+        <b>Say It As You Play It.</b> 画面の大きい文字は、いま弾いている音の音名です。声に出して。譜面から目を離せるようになるまでが第一段階。
+      </div>
+    </div>
+
+    <details class="fold">
+      <summary>この練習の中身</summary>
+      <div class="foldbody">
+        <p>R–3–5 を1ポジションに収めて上がり、頂点で折り返して下る。弾き終えたら平行短調、そこから五度圏を反時計回りに。指の運動ではなく<b>指板と理論の暗記</b>が目的なので、音名を声に出しながら弾くのが本体です。</p>
+      </div>
+    </details>
+
+    <details class="fold">
+      <summary>狙い・効果・つまずきやすい点</summary>
+      <div class="why">
+      <h3>この練習で何が起きているか</h3>
+      <p>五度圏を一周すると、12キーすべてで同じ形を <b>違うフレット・違う音名</b> で弾くことになります。指の形は同じなのに毎回考えることが変わる、というのがこの練習の設計です。</p>
+      <div class="cols">
+        <div class="col aim">
+          <h4>狙い</h4>
+          <ul>
+            <li>コードトーンを<b>指の形ではなく音名と度数</b>で覚える</li>
+            <li>1〜21フレットを12キーで均等に使い、<b>得意ポジションの偏り</b>を潰す</li>
+            <li>3音ごとのポジション移動で、<b>シフトの精度</b>を毎日確認する</li>
+            <li>平行調をセットで弾くことで、同じ音の集まりの<b>2つの顔</b>を体で覚える</li>
+          </ul>
+        </div>
+        <div class="col gain">
+          <h4>効果</h4>
+          <ul>
+            <li>コード進行に対して<b>着地できる音が即座に見える</b>ようになる</li>
+            <li>知らないキーの曲でも手が止まらない（フラット系が怖くなくなる）</li>
+            <li>アルペジオがそのまま<b>ボイシングの発想</b>に転用できる</li>
+            <li>朝イチの手でも安全に温まる。速さを要求しない運動なので故障リスクが低い</li>
+          </ul>
+        </div>
+        <div class="col trap">
+          <h4>つまずきやすい点</h4>
+          <ul>
+            <li><b>音名を言わないと</b>ただの指運動になり、効果はほぼ消える</li>
+            <li>速く弾きたくなるが、♩=60〜80で十分。テンポは目的ではない</li>
+            <li>シフトのたびに左手を見ていないか。見ずに届くまでが1段階</li>
+            <li>12キー全部を毎日やろうとして続かない。<b>1日2〜3キー</b>で回すほうが結局速い</li>
+          </ul>
+        </div>
+      </div>
+      </div>
+    </details>
+
+    <details class="fold">
+      <summary>進行順（反時計回り）— メジャー → その平行短調 → 次のキー</summary>
+      <div class="foldbody">
+        <div class="tabout" id="w1order"></div>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ======================= 02 ======================= -->
+<section role="tabpanel" id="p2" aria-labelledby="tab2" hidden>
+  <div class="wrap">
+    <div class="sechead">
+      <h2 class="sec">半音上（下）から2音で、狙った音に着地する</h2>
+      <span class="timecode">動画 4:13 —</span>
+    </div>
+
+    <div class="card">
+      <div class="nowplaying">
+        <div class="degree" id="w2deg">R</div>
+        <div class="sayit" id="w2say">C</div>
+        <div class="keyname" id="w2key" style="font-size:22px">C major</div>
+        <div class="sub" id="w2pos">— / 13 ターゲット</div>
+      </div>
+
+      <div class="fbscroll" id="w2scroll"><svg class="fb" id="w2fb" role="img" aria-label="指板図"></svg></div>
+      <div class="scrollhint">← 横スクロールできます／再生中は自動で追従 →</div>
+
+      <div class="row" style="margin-top:16px">
+        <button class="btn primary" id="w2play">再生</button>
+        <div class="seg" role="group" aria-label="調の種類">
+          <button id="w2maj" aria-pressed="true">メジャー（上から）</button>
+          <button id="w2min" aria-pressed="false">平行短調（下から）</button>
+        </div>
+        <button class="btn ghost" id="w2next">次のキーへ</button>
+        <button class="btn ghost" id="w2sound" aria-pressed="true">音を鳴らす</button>
+        <div class="seg" role="group" aria-label="指板の向き">
+          <button id="w2vert" aria-pressed="false">縦</button>
+          <button id="w2horiz" aria-pressed="true">横</button>
+        </div>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <div class="slider" style="flex:1">
+          <span>TEMPO</span>
+          <input type="range" id="w2tempo" min="40" max="130" value="64" aria-label="テンポ">
+          <span class="bpm" id="w2bpmv">64</span>
+        </div>
+        <div class="countline">1拍＝3音（アプローチ2音＋ターゲット）</div>
+      </div>
+      <div class="note" id="w2fing"><b>運指</b> 1–2–3</div>
+    </div>
+
+    <details class="fold">
+      <summary>この練習の中身</summary>
+      <div class="foldbody">
+        <p>2オクターブ＋頂点のルートで折り返す形。メジャーは各ターゲットに<b>上から</b>、平行短調は<b>下から</b>、半音2つを経由して入ります。声に出すのはターゲット音だけでOK。</p>
+      </div>
+    </details>
+
+    <details class="fold">
+      <summary>狙い・効果・つまずきやすい点</summary>
+      <div class="why">
+      <h3>この練習で何が起きているか</h3>
+      <p>01が「どこに音があるか」なら、02は「<b>そこへどう入るか</b>」。半音でにじり寄って着地する動きは、ジャズ・ファンク・ブルースに共通する語法そのものです。</p>
+      <div class="cols">
+        <div class="col aim">
+          <h4>狙い</h4>
+          <ul>
+            <li>コードトーンを<b>外側から装飾して入る</b>動きを反射にする</li>
+            <li>スケール外の音を通っても<b>着地で回収できる</b>感覚を作る</li>
+            <li>3音1組を均等に並べる＝<b>3連符のタイミング</b>の訓練</li>
+            <li>1–2–3 / 4–3–2 の持ち替えで、<b>薬指・小指の独立</b>を放置しない</li>
+          </ul>
+        </div>
+        <div class="col gain">
+          <h4>効果</h4>
+          <ul>
+            <li>アルペジオの羅列だったフレーズが<b>歌う形</b>になる</li>
+            <li>ミスタッチが「経過音」として成立し、演奏中に修復できる</li>
+            <li>弦をまたぐ瞬間のもたつきが減る（左右の同期精度）</li>
+            <li>上から／下からを選べる＝<b>フレーズの表情を選べる</b>ようになる</li>
+          </ul>
+        </div>
+        <div class="col trap">
+          <h4>つまずきやすい点</h4>
+          <ul>
+            <li>アプローチ2音を急いで弾き、<b>ターゲットで遅れる</b>のが典型的な崩れ方</li>
+            <li>3音が均等になっているか。ターゲットだけ少し強く弾くと揃いやすい</li>
+            <li>♩=50〜70で十分。速く回すと「なんとなく半音」で終わる</li>
+            <li>声に出すのは<b>ターゲット音だけ</b>。全部言おうとすると破綻する</li>
+          </ul>
+        </div>
+      </div>
+      </div>
+    </details>
+
+    <div class="card">
+      <h3>TAB<small>数字＝フレット／ <span style="color:var(--mustard)">濃い数字</span> がターゲット音</small></h3>
+      <div class="tabout" id="w2tab"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 03 ======================= -->
+<section role="tabpanel" id="p3" aria-labelledby="tab3" hidden>
+  <div class="wrap">
+    <div class="sechead">
+      <h2 class="sec">左手ミュートの16分で、アクセントの位置を動かす</h2>
+      <span class="timecode">動画 7:15 —</span>
+    </div>
+
+    <div class="card">
+      <div class="row" style="justify-content:space-between">
+        <div class="seg" role="group" aria-label="切り替えの速さ">
+          <button data-mode="4" aria-pressed="true">各4拍</button>
+          <button data-mode="2" aria-pressed="false">各2拍</button>
+          <button data-mode="1" aria-pressed="false">各1拍</button>
+          <button data-mode="all" aria-pressed="false">通し</button>
+        </div>
+        <div class="seg" role="group" aria-label="カウントの表記">
+          <button id="cntNum" aria-pressed="true">1 e + a</button>
+          <button id="cntTaka" aria-pressed="false">takadimi</button>
+        </div>
+      </div>
+
+      <div class="grid16" id="rgrid"></div>
+      <div class="countline" id="rcount"></div>
+      <div class="barlist" id="rbars"></div>
+
+      <div class="row" style="margin-top:18px">
+        <button class="btn primary" id="rplay">再生</button>
+        <button class="btn ghost" id="rchord" aria-pressed="false">アクセントを E9 で鳴らす</button>
+        <button class="btn ghost" id="rclick" aria-pressed="true">4分クリック</button>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <div class="slider" style="flex:1">
+          <span>TEMPO</span>
+          <input type="range" id="rtempo" min="50" max="140" value="95" aria-label="テンポ">
+          <span class="bpm" id="rbpmv">95</span>
+        </div>
+      </div>
+      <div class="note">
+        <b>コードに置き換える段階。</b> アクセントの代わりに E9 を差し込むと、そのままファンクのカッティングになります。押さえは <span class="kbd">x 7 6 7 7 7</span>（元記事の表記 x78777 は誤植と思われるので、一般的な E9 ヴォイシングにしています）。
+      </div>
+    </div>
+
+    <details class="fold">
+      <summary>この練習の中身</summary>
+      <div class="foldbody">
+        <p>左手で弦を触ってミュートし、16分を止めずに刻む。そのうち1つだけを強く弾く。アクセント位置を <b>4拍ずつ → 2拍ずつ → 1拍ずつ</b> と切り替えていきます。速く弾くより、遅くしてクリックに貼り付けるほうが難しい練習。</p>
+      </div>
+    </details>
+
+    <details class="fold">
+      <summary>狙い・効果・つまずきやすい点</summary>
+      <div class="why">
+      <h3>この練習で何が起きているか</h3>
+      <p>右手は16分を止めずに振り続け、変わるのは<b>どこを強く弾くか</b>だけ。音符の並びではなくアクセントの位置がグルーヴを決める、という事実をそのまま練習に落としたものです。</p>
+      <div class="cols">
+        <div class="col aim">
+          <h4>狙い</h4>
+          <ul>
+            <li>16分の4つの位置すべてを<b>「重心」にできる</b>ようにする</li>
+            <li>ストロークを止めずに<b>音量だけ</b>を操作する右手のコントロール</li>
+            <li>裏（e・a）から始まる感覚を、数えずに体で持つ</li>
+            <li>切り替え間隔を詰めることで<b>持続的な集中</b>を鍛える</li>
+          </ul>
+        </div>
+        <div class="col gain">
+          <h4>効果</h4>
+          <ul>
+            <li>カッティングが<b>ノリのある形</b>になる（同じ譜面でも別物になる）</li>
+            <li>裏拍からフレーズを始められる＝リズムの語彙が4倍になる</li>
+            <li>バンドで走らない／もたらない。クリックへの追従が正確になる</li>
+            <li>右手の空振りが安定するので、<b>ミスタッチそのものが減る</b></li>
+          </ul>
+        </div>
+        <div class="col trap">
+          <h4>つまずきやすい点</h4>
+          <ul>
+            <li>アクセント以外で右手を止めてしまう。<b>空振りも必ず振る</b></li>
+            <li>アクセントで手首に力が入り、テンポが突っ込む</li>
+            <li>速いほうが難しいと思いがちだが、<b>60bpm以下のほうが難関</b>。逃げずに落とす</li>
+            <li>E9に替えると左手のミュート解除が遅れ、音が濁る。切り替えは左手の課題</li>
+          </ul>
+        </div>
+      </div>
+      </div>
+    </details>
+
+    <details class="fold">
+      <summary>ストレッチについて（動画 7:00 あたり）</summary>
+      <div class="foldbody">
+        <p>元記事の著者が手専門の作業療法士に確認したところ、ストレッチ自体は有効だが <b>肘を伸ばし切らない（少し曲げる）</b>、<b>強く引っ張らず15〜20秒かけて</b> とのこと。痛みが出たら即中止。判断に迷うなら専門家へ。</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ======================= 04 ======================= -->
+<section role="tabpanel" id="p4" aria-labelledby="tab4" hidden>
+  <div class="wrap">
+    <div class="sechead">
+      <h2 class="sec">グリッドに対して、自分がどこにいるか</h2>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <button class="btn primary" id="gplay">計測を始める</button>
+        <div class="seg" role="group" aria-label="タップする単位">
+          <button id="gq" aria-pressed="true">4分でタップ</button>
+          <button id="g8" aria-pressed="false">8分でタップ</button>
+        </div>
+        <button class="btn ghost" id="greset">記録を消す</button>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <div class="slider" style="flex:1">
+          <span>TEMPO</span>
+          <input type="range" id="gtempo" min="50" max="160" value="90" aria-label="テンポ">
+          <span class="bpm" id="gbpmv">90</span>
+        </div>
+      </div>
+
+      <button class="tappad" id="gtap">ここをタップ（または Space）</button>
+
+      <svg class="scatter" id="gscatter" role="img" aria-label="タップのズレの分布" style="margin-top:14px"></svg>
+      <div class="stats">
+        <div class="stat"><div class="v" id="gmean">—</div><div class="l">平均のズレ ms</div></div>
+        <div class="stat"><div class="v" id="gsd">—</div><div class="l">ばらつき ms</div></div>
+        <div class="stat"><div class="v" id="gn">0</div><div class="l">タップ数</div></div>
+      </div>
+      <div class="note">平均がプラスなら<b>突っ込み気味</b>ではなく<b>もたり</b>（グリッドより後ろ）。マイナスなら食い気味。数値より、<b>ばらつきが小さいか</b>を見てください。</div>
+    </div>
+
+    <details class="fold">
+      <summary>この計測の中身</summary>
+      <div class="foldbody">
+        <p>Cory は練習をDAWに録音して、波形をグリッドと見比べます。ここではその簡易版。クリックに合わせてタップすると、グリッドからのズレをミリ秒で表示します（画面タップ、または <span class="kbd">Space</span>）。</p>
+      </div>
+    </details>
+
+    <details class="fold">
+      <summary>狙い・効果・数値の読み方</summary>
+      <div class="why">
+      <h3>この練習で何が起きているか</h3>
+      <p>演奏中の「合っている感じ」は、実際のズレとかなり食い違います。数値にすると、直すべきものが<b>感覚ではなく事実</b>になります。</p>
+      <div class="cols">
+        <div class="col aim">
+          <h4>狙い</h4>
+          <ul>
+            <li>自分の癖（走る／もたる）を<b>方向と量</b>で把握する</li>
+            <li>主観の精度と実測の差を埋める＝<b>耳の解像度</b>を上げる</li>
+            <li>疲労やテンポによって癖がどう変わるかを見る</li>
+          </ul>
+        </div>
+        <div class="col gain">
+          <h4>効果</h4>
+          <ul>
+            <li>練習が「たくさん弾く」から<b>「ズレを1つ潰す」</b>に変わる</li>
+            <li>録音物のノリが安定し、あとから直す作業が減る</li>
+            <li>上達が数字で見えるので、<b>続ける理由</b>が自前で手に入る</li>
+          </ul>
+        </div>
+        <div class="col trap">
+          <h4>読み方の目安</h4>
+          <ul>
+            <li>ばらつき <b>10ms以内</b> なら十分タイト。20〜30msでズレは聴こえ始める</li>
+            <li>平均のズレは味になることもある。<b>優先して減らすのはばらつき</b></li>
+            <li>疲れると後半に崩れる。最低1分は続けて測る</li>
+            <li>テンポを変えて2回測ると、癖の正体が見えやすい</li>
+          </ul>
+        </div>
+      </div>
+      </div>
+    </details>
+
+    <div class="card">
+      <h3>時間別のメニュー<small>順番には意味がある：左手の形 → 左右の同期 → 右手のグルーヴ</small></h3>
+      <div class="menu">
+        <div class="m">
+          <h4>5 MIN — 基準はこれ</h4>
+          <ol>
+            <li><b>01</b> を2キーだけ（音名を声に出す）</li>
+            <li><b>03</b> の各4拍を1周</li>
+          </ol>
+        </div>
+        <div class="m">
+          <h4>15 MIN — 余裕がある日</h4>
+          <ol>
+            <li><b>01</b> を4キー、平行短調まで</li>
+            <li><b>02</b> を同じキーで、上から／下から</li>
+            <li><b>03</b> を各4拍→各2拍→各1拍で通し</li>
+            <li><b>04</b> で30秒だけ測る</li>
+          </ol>
+        </div>
+      </div>
+      <div class="note">うまくいった日も<b>基準は5分のまま据え置く</b>のが元記事の主張です。上げた瞬間に続かなくなるので、多くやりたい日は勝手に多くやればいい、という考え方。</div>
+    </div>
+
+    <div class="card">
+      <h3>続けるための仕掛け<small>ハードルは低いまま据え置く</small></h3>
+      <p class="lede" style="margin:0 0 6px">元記事の結論はシンプルで、「開始の摩擦をゼロにする」「毎日チェックを付けて連続記録を切らさない」「基準は5分のまま上げない」。うまくいっても基準を上げないのが肝です。</p>
+      <div class="row" style="margin-top:14px">
+        <button class="btn primary" id="sdone">今日の基礎練を記録</button>
+        <div><span class="bpm" id="sstreak" style="font-size:26px">0</span> <span class="countline">日連続</span></div>
+      </div>
+      <div class="streakgrid" id="sgrid" aria-label="直近28日"></div>
+      <div class="countline" style="margin-top:8px">直近28日。記録はこのページに保存されます。</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    元ネタ：Reverb によるCory Wong へのインタビューと、Josh Frets（Fretboard Anatomy）による書き起こし記事。指板図・TAB・音はこのページで生成した独自実装で、記事のPDF等は含みません。
+  </div>
+</footer>
+
+<script>
+/* =========================================================
+   共通：音まわり
+   ========================================================= */
+let AC=null;
+function ctx(){ if(!AC){ AC=new (window.AudioContext||window.webkitAudioContext)(); } if(AC.state==='suspended') AC.resume(); return AC; }
+
+let noiseBuf=null;
+function noise(){
+  const c=ctx();
+  if(!noiseBuf){
+    noiseBuf=c.createBuffer(1,c.sampleRate*0.2,c.sampleRate);
+    const d=noiseBuf.getChannelData(0);
+    for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+  }
+  return noiseBuf;
+}
+/* ミュートした空ピック音 */
+function chick(t,accent){
+  const c=ctx();
+  const s=c.createBufferSource(); s.buffer=noise();
+  const f=c.createBiquadFilter(); f.type='bandpass';
+  f.frequency.value=accent?2400:1500; f.Q.value=accent?1.1:1.6;
+  const g=c.createGain();
+  const v=accent?0.5:0.13;
+  g.gain.setValueAtTime(0.0001,t);
+  g.gain.exponentialRampToValueAtTime(v,t+0.003);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+(accent?0.09:0.05));
+  s.connect(f); f.connect(g); g.connect(c.destination);
+  s.start(t); s.stop(t+0.15);
+}
+/* メトロノームのクリック */
+function click(t,strong){
+  const c=ctx();
+  const o=c.createOscillator(), g=c.createGain();
+  o.type='square'; o.frequency.value=strong?1600:1050;
+  g.gain.setValueAtTime(0.0001,t);
+  g.gain.exponentialRampToValueAtTime(strong?0.28:0.16,t+0.002);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+0.045);
+  o.connect(g); g.connect(c.destination); o.start(t); o.stop(t+0.06);
+}
+function midiHz(m){ return 440*Math.pow(2,(m-69)/12); }
+/* 単音（弦っぽい減衰） */
+function pluck(t,midi,vol){
+  const c=ctx();
+  const o=c.createOscillator(), o2=c.createOscillator(), g=c.createGain(), f=c.createBiquadFilter();
+  o.type='triangle'; o2.type='sine';
+  o.frequency.value=midiHz(midi); o2.frequency.value=midiHz(midi+12);
+  f.type='lowpass'; f.frequency.setValueAtTime(4200,t); f.frequency.exponentialRampToValueAtTime(900,t+0.5);
+  const v=vol==null?0.22:vol;
+  g.gain.setValueAtTime(0.0001,t);
+  g.gain.exponentialRampToValueAtTime(v,t+0.006);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+0.75);
+  const g2=c.createGain(); g2.gain.value=0.25;
+  o.connect(f); o2.connect(g2); g2.connect(f); f.connect(g); g.connect(c.destination);
+  o.start(t); o2.start(t); o.stop(t+0.85); o2.stop(t+0.85);
+}
+/* コードのスタブ */
+function stab(t,midis){
+  midis.forEach((m,i)=>pluck(t+i*0.006,m,0.13));
+}
+
+/* スケジューラ（先読み方式） */
+function scheduler(intervalFn,onTick){
+  let running=false,next=0,i=0,timer=null;
+  function loop(){
+    const c=ctx();
+    while(next < c.currentTime+0.13){
+      onTick(i,next); i++; next+=intervalFn();
+    }
+    timer=setTimeout(loop,25);
+  }
+  return {
+    start(){ if(running)return; running=true; i=0; const c=ctx(); next=c.currentTime+0.1; loop(); },
+    stop(){ running=false; clearTimeout(timer); },
+    isRunning(){ return running; }
+  };
+}
+/* 画面反映のキュー */
+function makeVisualQueue(){
+  const q=[];
+  let raf=null, handler=null;
+  function tick(){
+    const c=ctx();
+    while(q.length && q[0].t<=c.currentTime){ const e=q.shift(); if(handler) handler(e); }
+    raf=requestAnimationFrame(tick);
+  }
+  return {
+    push(e){ q.push(e); },
+    clear(){ q.length=0; },
+    on(h){ handler=h; },
+    start(){ if(!raf) raf=requestAnimationFrame(tick); },
+    stop(){ if(raf){cancelAnimationFrame(raf); raf=null;} q.length=0; }
+  };
+}
+
+/* =========================================================
+   共通：音名・指板
+   ========================================================= */
+const FLAT =['C','Db','D','Eb','E','F','Gb','G','Ab','A','Bb','B'];
+const SHARP=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const OPEN=[64,59,55,50,45,40]; // index0=1弦(高いE) … index5=6弦
+function openMidi(str){ return OPEN[str-1]; }
+function midiOf(str,fret){ return openMidi(str)+fret; }
+
+/* 五度圏を反時計回り */
+const KEYS=[
+  {maj:'C', mpc:0,  min:'Am',  npc:9,  acc:'n'},
+  {maj:'F', mpc:5,  min:'Dm',  npc:2,  acc:'b'},
+  {maj:'Bb',mpc:10, min:'Gm',  npc:7,  acc:'b'},
+  {maj:'Eb',mpc:3,  min:'Cm',  npc:0,  acc:'b'},
+  {maj:'Ab',mpc:8,  min:'Fm',  npc:5,  acc:'b'},
+  {maj:'Db',mpc:1,  min:'Bbm', npc:10, acc:'b'},
+  {maj:'Gb',mpc:6,  min:'Ebm', npc:3,  acc:'b'},
+  {maj:'B', mpc:11, min:'G#m', npc:8,  acc:'#'},
+  {maj:'E', mpc:4,  min:'C#m', npc:1,  acc:'#'},
+  {maj:'A', mpc:9,  min:'F#m', npc:6,  acc:'#'},
+  {maj:'D', mpc:2,  min:'Bm',  npc:11, acc:'#'},
+  {maj:'G', mpc:7,  min:'Em',  npc:4,  acc:'#'}
+];
+function nameOf(pc,acc){ return (acc==='#'?SHARP:FLAT)[((pc%12)+12)%12]; }
+
+/* 6弦ルートの3オクターブ・トライアド形 [弦, ルートからのフレット差, 度数] */
+const SHAPE_MAJ=[[6,0,'R'],[5,-1,'3'],[4,-3,'5'],[4,2,'R'],[3,1,'3'],[2,0,'5'],[2,5,'R'],[1,4,'3'],[1,7,'5']];
+const SHAPE_MIN=[[6,0,'R'],[5,-2,'3'],[4,-3,'5'],[4,2,'R'],[3,0,'3'],[2,0,'5'],[2,5,'R'],[1,3,'3'],[1,7,'5']];
+
+function rootFret(pc,minFret){
+  let n=((pc-4)%12+12)%12;
+  while(n<minFret) n+=12;
+  return n;
+}
+function buildShape(pc,isMinor,minRoot){
+  const n=rootFret(pc,minRoot||3);
+  const sh=isMinor?SHAPE_MIN:SHAPE_MAJ;
+  return sh.map(function(o){ return {string:o[0],fret:n+o[1],deg:o[2]}; });
+}
+const DEGCOL={'R':'var(--mustard)','3':'var(--coral)','5':'var(--mint)'};
+
+/* 指板SVGを描く。vertical=true で縦向き（ナットが上、6弦が左） */
+const INLAY=[3,5,7,9,15,17,19,21];
+const STRNAME={6:'E',5:'A',4:'D',3:'G',2:'B',1:'e'};
+function fbRange(notes,extra){
+  const frets=notes.map(function(n){return n.fret;}).concat((extra||[]).map(function(n){return n.fret;}));
+  let lo=Math.max(0,Math.min.apply(null,frets)-1);
+  let hi=Math.max.apply(null,frets)+1;
+  if(hi-lo<5) hi=lo+5;
+  return {lo:lo,hi:hi};
+}
+function drawFB(svg,notes,current,extra,vertical){
+  const r=fbRange(notes,extra), lo=r.lo, hi=r.hi, cols=hi-lo+1;
+  const parts=[];
+  let w,h,cur=null,midX=null;
+
+  if(vertical){
+    const cw=30, fh=34, ml=24, mt=34;
+    w=ml+6*cw+12; h=mt+cols*fh+12;
+    const sx=function(str){ return ml+(6-str+0.5)*cw; };       // 6弦が左
+    const fy=function(f){ return mt+(f-lo+0.5)*fh; };          // フレット中央
+    const ly=function(f){ return mt+(f-lo)*fh; };              // フレット線
+    // 弦名（左から 6弦→1弦）
+    for(let s=6;s>=1;s--){
+      parts.push('<text x="'+sx(s)+'" y="'+(mt-13)+'" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-weight="600" font-size="11" fill="'+(s===6||s===1?'var(--cream)':'#A392B0')+'">'+STRNAME[s]+'</text>');
+    }
+    parts.push('<rect x="'+ml+'" y="'+(mt-2)+'" width="'+(6*cw)+'" height="'+(cols*fh+4)+'" rx="6" fill="#160F1D" stroke="var(--line)"/>');
+    for(let f=lo;f<=hi;f++){
+      const cy=fy(f), cx=ml+3*cw;
+      if(INLAY.indexOf(f)>=0) parts.push('<circle cx="'+cx+'" cy="'+cy+'" r="4.5" fill="#2E2136"/>');
+      if(f===12||f===24){
+        parts.push('<circle cx="'+(ml+1.7*cw)+'" cy="'+cy+'" r="4.5" fill="#2E2136"/>');
+        parts.push('<circle cx="'+(ml+4.3*cw)+'" cy="'+cy+'" r="4.5" fill="#2E2136"/>');
+      }
+      parts.push('<text x="'+(ml-7)+'" y="'+(cy+3.5)+'" text-anchor="end" font-family="IBM Plex Mono,monospace" font-size="10" fill="#A392B0">'+f+'</text>');
+    }
+    for(let f=lo;f<=hi+1;f++){
+      const y=ly(f), isNut=(f===0);
+      parts.push('<line x1="'+ml+'" y1="'+y+'" x2="'+(ml+6*cw)+'" y2="'+y+'" stroke="'+(isNut?'var(--cream)':'#4A3757')+'" stroke-width="'+(isNut?3:1)+'"/>');
+    }
+    for(let s=6;s>=1;s--){
+      const x=sx(s);
+      parts.push('<line x1="'+x+'" y1="'+(mt-2)+'" x2="'+x+'" y2="'+(mt+cols*fh+2)+'" stroke="#5B4569" stroke-width="'+(0.8+(s-1)*0.28)+'"/>');
+    }
+    (extra||[]).forEach(function(n){
+      parts.push('<circle cx="'+sx(n.string)+'" cy="'+fy(n.fret)+'" r="8" fill="none" stroke="#6C5478" stroke-width="1.5" stroke-dasharray="2 2"/>');
+    });
+    notes.forEach(function(n,i){
+      const cx=sx(n.string), cy=fy(n.fret), on=(i===current);
+      if(on){ cur={x:cx,y:cy}; parts.push('<circle cx="'+cx+'" cy="'+cy+'" r="14" fill="none" stroke="var(--cream)" stroke-width="2"/>'); }
+      parts.push('<circle cx="'+cx+'" cy="'+cy+'" r="10.5" fill="'+DEGCOL[n.deg]+'" opacity="'+(on?1:0.82)+'"/>');
+      parts.push('<text x="'+cx+'" y="'+(cy+3.4)+'" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-weight="600" font-size="9" fill="#1D1526">'+n.name+'</text>');
+    });
+  } else {
+    const fw=46, gap=25, ml=46, mt=20;
+    w=ml+cols*fw+14; h=mt+5*gap+34;
+    // 弦名（上から 1弦→6弦）
+    for(let s=1;s<=6;s++){
+      parts.push('<text x="'+(ml-15)+'" y="'+(mt+(s-1)*gap+3.5)+'" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-weight="600" font-size="11" fill="'+(s===6||s===1?'var(--cream)':'#A392B0')+'">'+STRNAME[s]+'</text>');
+    }
+    parts.push('<rect x="'+ml+'" y="'+(mt-9)+'" width="'+(cols*fw)+'" height="'+(5*gap+18)+'" rx="6" fill="#160F1D" stroke="var(--line)"/>');
+    for(let f=lo;f<=hi;f++){
+      const cx=ml+(f-lo+0.5)*fw, cy=mt+2.5*gap;
+      if(INLAY.indexOf(f)>=0) parts.push('<circle cx="'+cx+'" cy="'+cy+'" r="4.5" fill="#2E2136"/>');
+      if(f===12||f===24){
+        parts.push('<circle cx="'+cx+'" cy="'+(mt+1.2*gap)+'" r="4.5" fill="#2E2136"/>');
+        parts.push('<circle cx="'+cx+'" cy="'+(mt+3.8*gap)+'" r="4.5" fill="#2E2136"/>');
+      }
+    }
+    for(let f=lo;f<=hi+1;f++){
+      const x=ml+(f-lo)*fw, isNut=(f===0);
+      parts.push('<line x1="'+x+'" y1="'+(mt-9)+'" x2="'+x+'" y2="'+(mt+5*gap+9)+'" stroke="'+(isNut?'var(--cream)':'#4A3757')+'" stroke-width="'+(isNut?3:1)+'"/>');
+    }
+    for(let s=0;s<6;s++){
+      const y=mt+s*gap;
+      parts.push('<line x1="'+ml+'" y1="'+y+'" x2="'+(ml+cols*fw)+'" y2="'+y+'" stroke="#5B4569" stroke-width="'+(0.8+s*0.28)+'"/>');
+    }
+    for(let f=lo;f<=hi;f++){
+      parts.push('<text x="'+(ml+(f-lo+0.5)*fw)+'" y="'+(mt+5*gap+28)+'" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="#A392B0">'+f+'</text>');
+    }
+    const nf=notes.map(function(n){return n.fret;});
+    midX=ml+((Math.min.apply(null,nf)+Math.max.apply(null,nf))/2-lo+0.5)*fw;
+    (extra||[]).forEach(function(n){
+      parts.push('<circle cx="'+(ml+(n.fret-lo+0.5)*fw)+'" cy="'+(mt+(n.string-1)*gap)+'" r="8" fill="none" stroke="#6C5478" stroke-width="1.5" stroke-dasharray="2 2"/>');
+    });
+    notes.forEach(function(n,i){
+      const cx=ml+(n.fret-lo+0.5)*fw, cy=mt+(n.string-1)*gap, on=(i===current);
+      if(on){ cur={x:cx,y:cy}; parts.push('<circle cx="'+cx+'" cy="'+cy+'" r="16" fill="none" stroke="var(--cream)" stroke-width="2"/>'); }
+      parts.push('<circle cx="'+cx+'" cy="'+cy+'" r="11" fill="'+DEGCOL[n.deg]+'" opacity="'+(on?1:0.82)+'"/>');
+      parts.push('<text x="'+cx+'" y="'+(cy+3.5)+'" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-weight="600" font-size="9.5" fill="#1D1526">'+n.name+'</text>');
+    });
+  }
+
+  svg.setAttribute('viewBox','0 0 '+w+' '+h);
+  svg.classList.toggle('vert',!!vertical);
+  svg.innerHTML=parts.join('');
+  return {vw:w,cur:cur,lo:lo,hi:hi,midX:midX};
+}
+
+/* 横向きのとき、現在の音が見えるようにスクロールを追従させる */
+function followScroll(scroller,svg,info,notes,vertical){
+  if(vertical){ scroller.classList.add('vert'); return; }
+  scroller.classList.remove('vert');
+  const cw=scroller.clientWidth;
+  const sw=scroller.scrollWidth;
+  if(sw<=cw+2) return;
+  const rw=svg.getBoundingClientRect().width || sw;
+  const toPx=function(x){ return (x/info.vw)*rw; };
+  let targetX;
+  if(info.cur){
+    const px=toPx(info.cur.x);
+    const left=scroller.scrollLeft, edge=cw*0.22;
+    if(px>left+edge && px<left+cw-edge) return;   // 十分見えているので動かさない
+    targetX=px-cw/2;
+  } else if(info.midX!=null){
+    targetX=toPx(info.midX)-cw/2;   // 停止中は形の中央を表示
+  } else {
+    return;
+  }
+  targetX=Math.max(0,Math.min(sw-cw,targetX));
+  if(Math.abs(scroller.scrollLeft-targetX)<3) return;
+  if(typeof scroller.scrollTo==='function'){
+    scroller.scrollTo({left:targetX,behavior:'smooth'});
+  } else {
+    scroller.scrollLeft=targetX;
+  }
+}
+
+/* 端末幅から既定の向きを決める */
+const FBV={w1:(window.innerWidth<760),w2:(window.innerWidth<760)};
+
+/* =========================================================
+   01 アルペジオ × 五度圏
+   ========================================================= */
+const W1={ki:0,minor:false,seq:[],step:-1,auto:false,sound:true,div:1};
+
+function w1Build(){
+  const k=KEYS[W1.ki];
+  const pc=W1.minor?k.npc:k.mpc;
+  const acc=k.acc;
+  const shape=buildShape(pc,W1.minor,3);
+  const up=shape.map(function(n){ return Object.assign({},n,{name:nameOf(midiOf(n.string,n.fret)%12,acc)}); });
+  const down=up.slice(0,8).reverse();
+  W1.notes=up;
+  W1.seq=up.concat(down);
+  document.getElementById('w1key').textContent=(W1.minor?k.min:k.maj)+(W1.minor?' minor':' major');
+  w1Render();
+}
+function w1Render(){
+  const idx=W1.step<0?-1:W1.seq[W1.step].__i;
+  const svg=document.getElementById('w1fb');
+  const info=drawFB(svg,W1.notes,idx,null,FBV.w1);
+  followScroll(document.getElementById('w1scroll'),svg,info,W1.notes,FBV.w1);
+  const cur=W1.step<0?null:W1.seq[W1.step];
+  document.getElementById('w1say').textContent=cur?cur.name:'—';
+  document.getElementById('w1deg').textContent=cur?({R:'ROOT','3':'3RD','5':'5TH'})[cur.deg]:'READY';
+  document.getElementById('w1pos').textContent=(W1.step<0?'—':(W1.step+1))+' / '+W1.seq.length+' 音';
+  // 円の状態
+  Array.prototype.forEach.call(document.querySelectorAll('#dial g.key'),function(g,i){
+    g.classList.toggle('active',i===W1.ki);
+  });
+}
+/* seq の要素に元の並び番号を持たせる */
+function w1Index(){
+  const up=W1.notes;
+  W1.seq.forEach(function(n){ n.__i=up.indexOf(up.filter(function(u){return u.string===n.string&&u.fret===n.fret;})[0]); });
+}
+
+const w1q=makeVisualQueue();
+const w1sched=scheduler(function(){ return 60/W1.bpm/W1.div; },function(i,t){
+  const s=i%W1.seq.length;
+  const n=W1.seq[s];
+  if(W1.sound) pluck(t,midiOf(n.string,n.fret));
+  if(s===0&&i>0&&W1.auto){ /* 一周したら次へ（描画側で処理） */ }
+  w1q.push({t:t,s:s,wrapped:(s===W1.seq.length-1)});
+});
+w1q.on(function(e){
+  W1.step=e.s; w1Render();
+  if(e.wrapped&&W1.auto){ setTimeout(w1Advance,60/W1.bpm/W1.div*1000*0.9); }
+});
+function w1Advance(){
+  if(!W1.minor){ W1.minor=true; }
+  else { W1.minor=false; W1.ki=(W1.ki+1)%12; }
+  document.getElementById('w1maj').setAttribute('aria-pressed',String(!W1.minor));
+  document.getElementById('w1min').setAttribute('aria-pressed',String(W1.minor));
+  w1Build(); w1Index();
+}
+
+/* 五度圏の描画 */
+function drawDial(){
+  const svg=document.getElementById('dial');
+  const cx=130,cy=130,R=100;
+  let s='<circle cx="130" cy="130" r="118" fill="none" stroke="var(--line)"/>';
+  s+='<path d="M130 8 l-7 -11 l14 0 z" fill="var(--mustard)"/>';
+  s+='<text x="130" y="126" text-anchor="middle" font-family="Archivo,sans-serif" font-weight="800" font-size="9" fill="#6C5478" letter-spacing="2">COUNTER</text>';
+  s+='<text x="130" y="140" text-anchor="middle" font-family="Archivo,sans-serif" font-weight="800" font-size="9" fill="#6C5478" letter-spacing="2">CLOCKWISE</text>';
+  KEYS.forEach(function(k,i){
+    // 12時から反時計回りに並べる（＝五度圏を逆に回る順序）
+    const a=(-90-i*30)*Math.PI/180;
+    const qx=cx+R*Math.cos(a), qy=cy+R*Math.sin(a);
+    s+='<g class="key" data-i="'+i+'" role="button" tabindex="0" aria-label="'+k.maj+'">'+
+       '<circle cx="'+qx.toFixed(1)+'" cy="'+qy.toFixed(1)+'" r="19" fill="var(--panel2)" stroke="var(--line)"/>'+
+       '<text class="kmaj" x="'+qx.toFixed(1)+'" y="'+(qy-1).toFixed(1)+'" text-anchor="middle">'+k.maj+'</text>'+
+       '<text class="kmin" x="'+qx.toFixed(1)+'" y="'+(qy+9).toFixed(1)+'" text-anchor="middle">'+k.min+'</text>'+
+       '</g>';
+  });
+  svg.innerHTML=s;
+  Array.prototype.forEach.call(svg.querySelectorAll('g.key'),function(g){
+    function go(){ W1.ki=+g.dataset.i; W1.step=-1; w1Build(); w1Index(); }
+    g.addEventListener('click',go);
+    g.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(); }});
+  });
+}
+
+/* =========================================================
+   02 クロマチックアプローチ
+   ========================================================= */
+const W2={ki:0,minor:false,step:-1,sound:true};
+
+function w2Build(){
+  const k=KEYS[W2.ki], acc=k.acc;
+  const pc=W2.minor?k.npc:k.mpc;
+  const shape=buildShape(pc,W2.minor,W2.minor?5:3).slice(0,7);
+  const named=shape.map(function(n){ return Object.assign({},n,{name:nameOf(midiOf(n.string,n.fret)%12,acc)}); });
+  const targets=named.concat(named.slice(0,6).reverse());
+  W2.targets=targets;
+  W2.shape=named;
+  // アプローチ音（メジャー＝上から / マイナー＝下から）
+  const dir=W2.minor?-1:1;
+  W2.groups=targets.map(function(t){
+    return [
+      {string:t.string,fret:t.fret+dir*2},
+      {string:t.string,fret:t.fret+dir*1},
+      t
+    ];
+  });
+  document.getElementById('w2key').textContent=(W2.minor?k.min:k.maj)+(W2.minor?' minor':' major');
+  const f=(W2.ki<6)?'1 – 2 – 3':'4 – 3 – 2';
+  document.getElementById('w2fing').innerHTML='<b>運指</b> '+f+'　<span style="color:var(--dim)">（五度圏の折り返し地点 Gb から 4–3–2 に持ち替え）</span>';
+  w2Tab(); w2Render();
+}
+function w2Render(){
+  const gi=W2.step<0?-1:Math.floor(W2.step/3);
+  const t=gi<0?null:W2.targets[gi];
+  const ti=t?W2.shape.map(function(s){return s.string+':'+s.fret;}).indexOf(t.string+':'+t.fret):-1;
+  const extra=gi<0?[]:[W2.groups[gi][0],W2.groups[gi][1]];
+  const svg=document.getElementById('w2fb');
+  const info=drawFB(svg,W2.shape,ti,extra,FBV.w2);
+  followScroll(document.getElementById('w2scroll'),svg,info,W2.shape.concat(extra),FBV.w2);
+  document.getElementById('w2say').textContent=t?t.name:'—';
+  document.getElementById('w2deg').textContent=t?({R:'ROOT','3':'3RD','5':'5TH'})[t.deg]:'READY';
+  document.getElementById('w2pos').textContent=(gi<0?'—':(gi+1))+' / '+W2.targets.length+' ターゲット';
+  // TAB のハイライト
+  Array.prototype.forEach.call(document.querySelectorAll('#w2tab .g'),function(el,i){
+    el.classList.toggle('cur',i===gi);
+    el.style.background=(i===gi)?'var(--line)':'transparent';
+  });
+}
+function w2Tab(){
+  const rows=[[],[],[],[],[],[]]; // 1弦→6弦
+  const heads=['e','B','G','D','A','E'];
+  W2.groups.forEach(function(g){
+    for(let s=0;s<6;s++){
+      const cell=g.map(function(n,j){
+        if(n.string===s+1){
+          const txt=String(n.fret).padStart(2,'-');
+          return (j===2)?('<b>'+txt+'</b>'):txt;
+        }
+        return '--';
+      }).join('-');
+      rows[s].push(cell);
+    }
+  });
+  let html='';
+  for(let s=0;s<6;s++){
+    html+=heads[s]+'|-'+rows[s].map(function(c,i){ return '<span class="g" data-i="'+i+'">'+c+'</span>'; }).join('-|-')+'-|\n';
+  }
+  document.getElementById('w2tab').innerHTML=html;
+}
+const w2q=makeVisualQueue();
+const w2sched=scheduler(function(){ return 60/W2.bpm/3; },function(i,t){
+  const n=W2.groups.length*3;
+  const s=i%n;
+  const g=W2.groups[Math.floor(s/3)], j=s%3;
+  const note=g[j];
+  if(W2.sound) pluck(t,midiOf(note.string,note.fret),j===2?0.24:0.12);
+  w2q.push({t:t,s:s});
+});
+w2q.on(function(e){ W2.step=e.s; w2Render(); });
+
+/* =========================================================
+   03 アクセント移動
+   ========================================================= */
+const R3={mode:'4',bar:0,pos:-1,chord:false,click:true,taka:false};
+const PAT={
+  '4':[[0,0,0,0],[1,1,1,1],[2,2,2,2],[3,3,3,3]],
+  '2':[[0,0,1,1],[2,2,3,3]],
+  '1':[[0,1,2,3]]
+};
+function bars(){
+  if(R3.mode==='all') return PAT['4'].concat(PAT['2']).concat(PAT['1']);
+  return PAT[R3.mode];
+}
+const NUM=['1','e','+','a'], TAKA=['ta','ka','di','mi'];
+const E9=[45+7,50+6,55+7,59+7,64+7]; // x 7 6 7 7 7
+
+function r3Render(){
+  const bs=bars(), b=bs[R3.bar%bs.length];
+  const grid=document.getElementById('rgrid');
+  let html='';
+  for(let i=0;i<16;i++){
+    const beat=Math.floor(i/4), sub=i%4;
+    const acc=(sub===b[beat]);
+    const lab=R3.taka?TAKA[sub]:(sub===0?String(beat+1):NUM[sub]);
+    html+='<div class="cell'+(acc?' accent':'')+(sub===0?' beat':'')+(i===R3.pos?' head':'')+'">'+lab+'</div>';
+  }
+  grid.innerHTML=html;
+  document.getElementById('rcount').textContent=b.map(function(o,i){
+    if(R3.taka){ return TAKA.map(function(x,j){ return j===o?x.toUpperCase():x; }).join(''); }
+    return [String(i+1),'e','+','a'].map(function(x,j){ return j===o?'['+x+']':x; }).join('');
+  }).join('  ');
+  document.getElementById('rbars').innerHTML=bs.map(function(x,i){
+    return '<span class="b'+(i===R3.bar%bs.length?' on':'')+'">'+(i+1)+'小節 '+x.map(function(o){return R3.taka?TAKA[o]:NUM[o];}).join('/')+'</span>';
+  }).join('');
+}
+const r3q=makeVisualQueue();
+const r3sched=scheduler(function(){ return 60/R3.bpm/4; },function(i,t){
+  const bs=bars();
+  const bar=Math.floor(i/16)%bs.length, pos=i%16;
+  const beat=Math.floor(pos/4), sub=pos%4;
+  const acc=(sub===bs[bar][beat]);
+  if(acc&&R3.chord) stab(t,E9); else chick(t,acc);
+  if(R3.click&&sub===0) click(t,beat===0);
+  r3q.push({t:t,bar:bar,pos:pos});
+});
+r3q.on(function(e){ R3.bar=e.bar; R3.pos=e.pos; r3Render(); heroSync(e.pos); });
+
+/* =========================================================
+   04 グリッド計測 & 習慣
+   ========================================================= */
+const G={taps:[],div:1,marks:[]};
+const gq=makeVisualQueue();
+const gsched=scheduler(function(){ return 60/G.bpm/G.div; },function(i,t){
+  click(t,(i%(4*G.div))===0);
+  G.marks.push(t);
+  if(G.marks.length>200) G.marks.shift();
+});
+function gTap(){
+  if(!gsched.isRunning()) return;
+  const now=ctx().currentTime;
+  let best=null,bd=1e9;
+  G.marks.forEach(function(m){ const d=Math.abs(now-m); if(d<bd){bd=d;best=m;} });
+  if(best===null) return;
+  const off=(now-best)*1000;
+  if(Math.abs(off)>60/G.bpm/G.div*1000*0.6) return;
+  G.taps.push(off);
+  if(G.taps.length>48) G.taps.shift();
+  gRender();
+}
+function gRender(){
+  const svg=document.getElementById('gscatter');
+  const W=600,H=130,mid=H/2;
+  const span=80; // ±80ms
+  let s='<rect width="'+W+'" height="'+H+'" fill="#160F1D"/>';
+  for(let ms=-60;ms<=60;ms+=20){
+    const x=W/2+(ms/span)*(W/2-20);
+    s+='<line x1="'+x+'" y1="14" x2="'+x+'" y2="'+(H-22)+'" stroke="'+(ms===0?'var(--mustard)':'#33253F')+'" stroke-width="'+(ms===0?2:1)+'"/>';
+    s+='<text x="'+x+'" y="'+(H-8)+'" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9" fill="#6C5478">'+(ms>0?'+':'')+ms+'</text>';
+  }
+  G.taps.forEach(function(o,i){
+    const x=W/2+(Math.max(-span,Math.min(span,o))/span)*(W/2-20);
+    const y=18+((i%9)+1)*9;
+    const col=Math.abs(o)<15?'var(--mint)':(Math.abs(o)<30?'var(--mustard)':'var(--coral)');
+    s+='<circle cx="'+x.toFixed(1)+'" cy="'+y+'" r="4" fill="'+col+'" opacity="'+(0.35+0.65*(i/Math.max(1,G.taps.length-1)))+'"/>';
+  });
+  svg.setAttribute('viewBox','0 0 '+W+' '+H);
+  svg.innerHTML=s;
+  const n=G.taps.length;
+  document.getElementById('gn').textContent=n;
+  if(n){
+    const m=G.taps.reduce(function(a,b){return a+b;},0)/n;
+    const sd=Math.sqrt(G.taps.reduce(function(a,b){return a+(b-m)*(b-m);},0)/n);
+    document.getElementById('gmean').textContent=(m>0?'+':'')+m.toFixed(1);
+    document.getElementById('gsd').textContent=sd.toFixed(1);
+  } else {
+    document.getElementById('gmean').textContent='—';
+    document.getElementById('gsd').textContent='—';
+  }
+}
+
+/* ストリーク */
+const SKEY='cwwarmup:streak';
+let streak={dates:[]};
+function today(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function dayStr(off){ const d=new Date(); d.setDate(d.getDate()-off); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+async function loadStreak(){
+  try{ const r=await window.storage.get(SKEY); if(r&&r.value) streak=JSON.parse(r.value); }catch(e){}
+  renderStreak();
+}
+async function saveStreak(){
+  try{ await window.storage.set(SKEY,JSON.stringify(streak)); }catch(e){}
+}
+function renderStreak(){
+  let n=0;
+  for(let i=0;i<400;i++){ if(streak.dates.indexOf(dayStr(i))>=0) n++; else { if(i===0) continue; break; } }
+  document.getElementById('sstreak').textContent=n;
+  let html='';
+  for(let i=27;i>=0;i--){
+    const d=dayStr(i);
+    html+='<i class="'+(streak.dates.indexOf(d)>=0?'done':'')+(i===0?' today':'')+'" title="'+d+'"></i>';
+  }
+  document.getElementById('sgrid').innerHTML=html;
+}
+
+/* =========================================================
+   ヒーローの16分ストリップ
+   ========================================================= */
+(function(){
+  const strip=document.getElementById('heroStrip');
+  let h='';
+  for(let i=0;i<16;i++) h+='<i class="'+(i%4===0?'beat':'')+'"></i>';
+  strip.innerHTML=h;
+})();
+function heroSync(pos){
+  const cells=document.getElementById('heroStrip').children;
+  for(let i=0;i<16;i++) cells[i].classList.toggle('on',i===pos);
+}
+
+/* =========================================================
+   UI 配線
+   ========================================================= */
+function press(el,v){ el.setAttribute('aria-pressed',String(v)); }
+function stopAll(){
+  [w1sched,w2sched,r3sched,gsched].forEach(function(s){ s.stop(); });
+  [w1q,w2q,r3q,gq].forEach(function(q){ q.stop(); });
+  document.getElementById('w1play').textContent='再生';
+  document.getElementById('w2play').textContent='再生';
+  document.getElementById('rplay').textContent='再生';
+  document.getElementById('gplay').textContent='計測を始める';
+}
+
+/* タブ */
+const TABKEY='cwwarmup:tab';
+const tabs=Array.prototype.slice.call(document.querySelectorAll('.tabs button'));
+function selectTab(t,save){
+  stopAll();
+  tabs.forEach(function(x){
+    const on=(x===t);
+    x.setAttribute('aria-selected',String(on));
+    document.getElementById(x.getAttribute('aria-controls')).hidden=!on;
+  });
+  if(save){ try{ window.storage.set(TABKEY,t.id); }catch(e){} }
+}
+tabs.forEach(function(t){
+  t.addEventListener('click',function(){ selectTab(t,true); });
+});
+(async function(){
+  try{
+    const r=await window.storage.get(TABKEY);
+    const t=r&&r.value?document.getElementById(r.value):null;
+    if(t&&tabs.indexOf(t)>=0) selectTab(t,false);
+  }catch(e){}
+})();
+
+/* 01 */
+W1.bpm=76;
+document.getElementById('w1tempo').addEventListener('input',function(e){
+  W1.bpm=+e.target.value; document.getElementById('w1bpmv').textContent=W1.bpm;
+});
+document.getElementById('w1play').addEventListener('click',function(){
+  if(w1sched.isRunning()){ w1sched.stop(); w1q.stop(); this.textContent='再生'; }
+  else { ctx(); w1q.start(); w1sched.start(); this.textContent='停止'; }
+});
+document.getElementById('w1maj').addEventListener('click',function(){
+  W1.minor=false; press(this,true); press(document.getElementById('w1min'),false); W1.step=-1; w1Build(); w1Index();
+});
+document.getElementById('w1min').addEventListener('click',function(){
+  W1.minor=true; press(this,true); press(document.getElementById('w1maj'),false); W1.step=-1; w1Build(); w1Index();
+});
+document.getElementById('w1next').addEventListener('click',function(){ w1Advance(); });
+document.getElementById('w1auto').addEventListener('click',function(){
+  W1.auto=!W1.auto; press(this,W1.auto);
+});
+document.getElementById('w1sound').addEventListener('click',function(){
+  W1.sound=!W1.sound; press(this,W1.sound);
+});
+document.getElementById('w1q').addEventListener('click',function(){
+  W1.div=1; press(this,true); press(document.getElementById('w1e'),false);
+});
+document.getElementById('w1e').addEventListener('click',function(){
+  W1.div=2; press(this,true); press(document.getElementById('w1q'),false);
+});
+document.getElementById('w1order').textContent=
+  KEYS.map(function(k,i){ return String(i+1).padStart(2,' ')+'.  '+k.maj.padEnd(3,' ')+' →  '+k.min; }).join('\n');
+
+/* 02 */
+W2.bpm=64;
+document.getElementById('w2tempo').addEventListener('input',function(e){
+  W2.bpm=+e.target.value; document.getElementById('w2bpmv').textContent=W2.bpm;
+});
+document.getElementById('w2play').addEventListener('click',function(){
+  if(w2sched.isRunning()){ w2sched.stop(); w2q.stop(); this.textContent='再生'; }
+  else { ctx(); w2q.start(); w2sched.start(); this.textContent='停止'; }
+});
+document.getElementById('w2maj').addEventListener('click',function(){
+  W2.minor=false; press(this,true); press(document.getElementById('w2min'),false); W2.step=-1; w2Build();
+});
+document.getElementById('w2min').addEventListener('click',function(){
+  W2.minor=true; press(this,true); press(document.getElementById('w2maj'),false); W2.step=-1; w2Build();
+});
+document.getElementById('w2next').addEventListener('click',function(){
+  if(!W2.minor){ W2.minor=true; } else { W2.minor=false; W2.ki=(W2.ki+1)%12; }
+  press(document.getElementById('w2maj'),!W2.minor); press(document.getElementById('w2min'),W2.minor);
+  W2.step=-1; w2Build();
+});
+document.getElementById('w2sound').addEventListener('click',function(){
+  W2.sound=!W2.sound; press(this,W2.sound);
+});
+
+/* 03 */
+R3.bpm=95;
+document.getElementById('rtempo').addEventListener('input',function(e){
+  R3.bpm=+e.target.value; document.getElementById('rbpmv').textContent=R3.bpm;
+});
+Array.prototype.forEach.call(document.querySelectorAll('[data-mode]'),function(b){
+  b.addEventListener('click',function(){
+    Array.prototype.forEach.call(document.querySelectorAll('[data-mode]'),function(x){ press(x,x===b); });
+    R3.mode=b.dataset.mode; R3.bar=0; R3.pos=-1;
+    if(r3sched.isRunning()){ r3sched.stop(); r3q.clear(); r3sched.start(); }
+    r3Render();
+  });
+});
+document.getElementById('rplay').addEventListener('click',function(){
+  if(r3sched.isRunning()){ r3sched.stop(); r3q.stop(); R3.pos=-1; r3Render(); this.textContent='再生'; }
+  else { ctx(); r3q.start(); r3sched.start(); this.textContent='停止'; }
+});
+document.getElementById('rchord').addEventListener('click',function(){ R3.chord=!R3.chord; press(this,R3.chord); });
+document.getElementById('rclick').addEventListener('click',function(){ R3.click=!R3.click; press(this,R3.click); });
+document.getElementById('cntNum').addEventListener('click',function(){
+  R3.taka=false; press(this,true); press(document.getElementById('cntTaka'),false); r3Render();
+});
+document.getElementById('cntTaka').addEventListener('click',function(){
+  R3.taka=true; press(this,true); press(document.getElementById('cntNum'),false); r3Render();
+});
+
+/* 04 */
+G.bpm=90;
+document.getElementById('gtempo').addEventListener('input',function(e){
+  G.bpm=+e.target.value; document.getElementById('gbpmv').textContent=G.bpm;
+});
+document.getElementById('gplay').addEventListener('click',function(){
+  if(gsched.isRunning()){ gsched.stop(); gq.stop(); this.textContent='計測を始める'; }
+  else { ctx(); G.marks=[]; gq.start(); gsched.start(); this.textContent='停止'; }
+});
+document.getElementById('gq').addEventListener('click',function(){
+  G.div=1; press(this,true); press(document.getElementById('g8'),false);
+});
+document.getElementById('g8').addEventListener('click',function(){
+  G.div=2; press(this,true); press(document.getElementById('gq'),false);
+});
+document.getElementById('greset').addEventListener('click',function(){ G.taps=[]; gRender(); });
+document.getElementById('gtap').addEventListener('click',gTap);
+window.addEventListener('keydown',function(e){
+  if(e.code==='Space'&&!document.getElementById('p4').hidden){ e.preventDefault(); gTap(); }
+});
+document.getElementById('sdone').addEventListener('click',function(){
+  const t=today();
+  if(streak.dates.indexOf(t)<0){ streak.dates.push(t); saveStreak(); }
+  renderStreak();
+});
+
+/* 指板の向き */
+function setOrient(which,vert){
+  FBV[which]=vert;
+  press(document.getElementById(which+'vert'),vert);
+  press(document.getElementById(which+'horiz'),!vert);
+  if(which==='w1') w1Render(); else w2Render();
+}
+['w1','w2'].forEach(function(k){
+  document.getElementById(k+'vert').addEventListener('click',function(){ setOrient(k,true); });
+  document.getElementById(k+'horiz').addEventListener('click',function(){ setOrient(k,false); });
+});
+let rsz=null;
+window.addEventListener('resize',function(){
+  clearTimeout(rsz);
+  rsz=setTimeout(function(){ w1Render(); w2Render(); },150);
+});
+
+/* 初期化 */
+drawDial();
+w1Build(); w1Index();
+w2Build();
+setOrient('w1',FBV.w1);
+setOrient('w2',FBV.w2);
+r3Render();
+gRender();
+loadStreak();
+</script>
+</body>
+</html>
